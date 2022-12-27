@@ -1,4 +1,4 @@
-import { mat4 } from '../../lib/gl-matrix-module.js';
+import { vec3, mat4 } from '../../lib/gl-matrix-module.js';
 
 import { WebGL } from './WebGL.js';
 
@@ -18,6 +18,12 @@ export class Renderer {
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
 
+        this.perFragment = true;
+
+        this.currentProgram = this.perFragment
+            ? this.programs.perFragment
+            : this.programs.perVertex;
+            
         this.defaultTexture = WebGL.createTexture(gl, {
             width: 1,
             height: 1,
