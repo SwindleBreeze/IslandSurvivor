@@ -5,6 +5,7 @@ import { Renderer } from './modules/engine/Renderer.js';
 
 import { GameController } from './modules/game/Controllers/GameController.js';
 
+//JUSTI IS GHEJ
 export class Game extends Application{
     async start(){
         this.Renderer = new Renderer(this.gl)
