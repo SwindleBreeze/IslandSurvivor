@@ -14,6 +14,8 @@ export class Game extends Application{
         await this.Loader.load('./scenes/gltf/testIsland.gltf');
 
         this.camera = await this.Loader.loadNode("Camera")
+        this.light = await this.Loader.loadNode("Light")
+        console.log(this.light)
         this.scene = await this.Loader.loadScene(this.Loader.defaultScene)
 
         if (!this.scene || !this.camera) {

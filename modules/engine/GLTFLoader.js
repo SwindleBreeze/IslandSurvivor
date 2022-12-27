@@ -50,7 +50,6 @@ export class GLTFLoader {
 
     async load(url) {
         this.gltfUrl = new URL(url, window.location);
-        console.log(url)
         this.gltf = await this.fetchJson(url);
         this.defaultScene = this.gltf.scene ?? 0;
     }
