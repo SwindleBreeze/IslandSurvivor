@@ -3,11 +3,14 @@ import { Player } from "../objects/Player.js";
 export class CollisionController {
     constructor(game) {
         this.game = game;
+        this.interactibles = {}
+        this.levels = {}
         this.shouldUpdate = true;
     }
 
-    init (player) {
+    init (player, camera) {
         this.player = player;
+        this.camera = camera;
         console.log(this.game.scene)
     }
 
@@ -161,65 +164,60 @@ export class CollisionController {
     }
 
     update() {
-        let ppcol = false;
-
-        let rayOrigin = this.player.node.translation;
-        let rayDir = vec3.normalize(vec3.create(), vec3.fromValues(0, -1, 0));
-
-        let ray = {
-            origin: rayOrigin,
-            direction: rayDir
-        };
-
-        // console.log(ray)
-
-        let islandIntersect = "NOTHING"
-        for (let node of this.game.scene.nodes)
-        {
-            if(node.name == "Island")
-            {
-                islandIntersect = this.raycast(ray, node.mesh)
-            }
-        }
-
-        if(islandIntersect != null)
-        {
-
-            // console.log(islandIntersect)
-            // console.log(this.player.node.translation)
-
-            let dH = (this.player.node.translation[1] - this.player.node.scale[1])-islandIntersect[1]
-            
-            console.log(dH)
-            let vector = vec3.fromValues(0,islandIntersect[1],0)
-
-            let playerPos = vec3.clone(this.player.node.translation);
-            this.player.node.translation = vec3.sub(this.player.node.translation, this.player.node.translation,  this.player.node.translation);
-            this.player.node.translation = vec3.add(this.player.node.translation, this.player.node.translation,  vector);
-            let newPos = vec3.clone(this.player.node.translation);
-
-            vec3.sub(playerPos, newPos, playerPos);
-            this.game.camera.translation = vec3.add(this.game.camera.translation,this.game.camera.translation,playerPos);
-        }
+        this.camera.canMove = true
         
-        
-
         for (let node of this.game.scene.nodes)
         {
             if(node != null && node.name != "Player" && node.name!="WGTS_rig" && node.name!="Island"){
-                if(this.checkCollision(this.player, node))
-                {
-                    console.log("colliding")
+                let collision = this.checkCollision(this.player, node)
+                if(collision){
                     console.log(node.name)
-                }
-                node.traverse(other => {
-                    if(this.checkCollision(this.player, other))
+                    this.player.collision = true
+                    if(this.player.prevPos != null)
                     {
-                        console.log("colliding")
-                        console.log(other.name)
+                        this.player.node.translation = this.player.prevPos
+                        this.camera.translation = this.camera.prevPos
+                        this.camera.canMove = false
                     }
-                });
+                }
+                if(collision && node.name.startsWith("TreeStump"))
+                {
+                    this.interactibles[node.name] = true;
+                    // console.log(this.game.state.inputs)
+                    if(this.game.state.inputs["KeyE"])
+                    {
+                        console.log("Chopping wood")
+                    }
+                    // if(this.player.node.translation[0]+this.player.node.scale[0] > node.translation[0]+node.scale[0])
+                    // {
+                    //     console.log("CAME FROM RIGHT")
+                    // }
+
+                    // if(this.player.node.translation[0]+this.player.node.scale[0] < node.translation[0]+node.scale[0])
+                    // {
+                    //     console.log("CAME FROM LEFT")
+                    // }
+
+                    // if(this.player.node.translation[2]+this.player.node.scale[2] > node.translation[2]+node.scale[2])
+                    // {
+                    //     console.log("CAME FROM BOTTOM")
+                    // }
+
+                    // if(this.player.node.translation[2]+this.player.node.scale[2] < node.translation[2]+node.scale[2])
+                    // {
+                    //     console.log("CAME FROM TOP")
+                    // }
+                    // console.log(this.player.prevPos)
+                    // this.player.node.translation = this.player.prevPos
+                }
+                else if(!collision && node.name.startsWith("TreeStump"))
+                {
+                    this.interactibles[node.name] = false;
+                }
             }
         }
+
     }
+
+
 }

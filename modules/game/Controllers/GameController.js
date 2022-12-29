@@ -32,16 +32,16 @@ export class GameController{
         }
 
 
-        this.camera.translation = this.camera.translation = vec3.add(this.camera.translation,this.player.node.translation, [0,20,20])
+        this.camera.translation = this.camera.translation = vec3.add(this.camera.translation,this.player.node.translation, [0,2,2])
         this.camera.rotation = [-0.3, 0, 0, 1];
-
+        this.camera.canMove = true
         this.camera.camera.fov = 0.9;
         this.camera.camera.far = 60;
         this.camera.camera.near = 1;
 
         this.camera.camera.updateProjectionMatrix();
 
-        this.collisionController.init(this.player);
+        this.collisionController.init(this.player, this.camera);
 
         this.state.inputs = this.inputController.keys;
         this.shouldUpdate = true;
@@ -57,12 +57,15 @@ export class GameController{
             let playerPos = vec3.clone(this.player.node.translation);
             this.player.update(this,dt);
             let newPos = vec3.clone(this.player.node.translation);
-            
-            vec3.sub(playerPos, newPos, playerPos);
-
-            this.camera.translation = vec3.add(this.camera.translation,this.camera.translation,playerPos);
-            
             this.collisionController.update()
+            vec3.sub(playerPos, newPos, playerPos);
+            this.camera.prevPos = this.camera.translation
+            if(this.camera.canMove)
+            {
+                this.camera.translation = vec3.add(this.camera.translation,this.camera.translation,playerPos);
+            }
+            
+            
         }
     }
 }

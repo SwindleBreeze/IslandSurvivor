@@ -11,7 +11,7 @@ export class Game extends Application {
     this.renderer = new Renderer(this.gl);
     this.Loader = new GLTFLoader();
 
-    await this.Loader.load("./scenes/test/TestWithPlayer/slopetest.gltf");
+    await this.Loader.load("./scenes/test/TestWithPlayer/slopetestTree.gltf");
 
     this.camera = await this.Loader.loadNode("Camera");
     this.light = await this.Loader.loadNode("Light");

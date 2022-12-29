@@ -10,6 +10,7 @@ export class Player extends GameObject{
             up: [0, 0, -1],
             right: [1, 0, 0],
         }
+        this.direction
 
         this.acceleration = 5;
         this.maxSpeed = 5;
@@ -18,13 +19,16 @@ export class Player extends GameObject{
         this.yaw = 0;
         this.velocity = [0, 0, 0];
 
-        this.wood = 0;
+        this.prevPos;
 
+        this.wood = 0;
         this.states = {
             CURRENT_STATE: "idle",
             CHOPPING: "chooping",
             RUNNING: "running"
         }
+
+        this.collision = false;
     }
 
     setState(state){
@@ -77,8 +81,9 @@ export class Player extends GameObject{
         let speed = vec3.length(this.velocity)
         if(speed > this.maxSpeed) vec3.scale(this.velocity, this.velocity, this.maxSpeed / speed);
 
+        this.prevPos = vec3.clone(this.node.translation)
         this.node.translation = vec3.scaleAndAdd(this.node.translation, this.node.translation, this.velocity, dt);
-        // this.node.translation = vec3.add(this.node.translation, this.node.translation, gravity);
+
         let rotation = quat.create();
         quat.rotateY(rotation, rotation, this.yaw);
         quat.rotateX(rotation, rotation, this.pitch);

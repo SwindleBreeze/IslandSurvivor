@@ -203,15 +203,6 @@ export class Renderer {
 
         const mvpMatrix = this.getViewProjectionMatrix(camera);
         for (const node of scene.nodes) {
-            if(node.name == "Island")
-            {
-                let x = this.drawVertices(node)
-                // console.log(x)
-                for(let node of x)
-                {
-                    this.renderNode(x,mvpMatrix);
-                }
-            }
             this.renderNode(node, mvpMatrix);
         }
     }
