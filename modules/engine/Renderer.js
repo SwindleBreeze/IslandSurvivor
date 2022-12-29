@@ -196,14 +196,96 @@ export class Renderer {
         const gl = this.gl;
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.enable(gl.DEPTH_TEST)
 
         const { program, uniforms } = this.programs.simple;
         gl.useProgram(program);
 
         const mvpMatrix = this.getViewProjectionMatrix(camera);
         for (const node of scene.nodes) {
+            if(node.name == "Island")
+            {
+                let x = this.drawVertices(node)
+                // console.log(x)
+                for(let node of x)
+                {
+                    this.renderNode(x,mvpMatrix);
+                }
+            }
             this.renderNode(node, mvpMatrix);
         }
+    }
+
+    drawVertices(node) {
+        let mesh = node.mesh
+        let triangleArray = []
+        for (const primitive of mesh.primitives) {
+            const indicesAccessor = primitive.indices;
+            const attributes = primitive.attributes;
+        
+            // Retrieve the position attribute for the primitive
+            const positionAttribute = attributes.POSITION;
+            const bufferView = positionAttribute.bufferView;
+            const byteOffset = positionAttribute.byteOffset || 0;
+            const componentType = positionAttribute.componentType;
+            const count = positionAttribute.count;
+            const max = positionAttribute.max;
+            const min = positionAttribute.min;
+
+            // Convert the raw vertex data in the bufferView into an array of vec3 objects
+            const positions = [];
+            const data = new Uint8Array(bufferView.buffer, bufferView.byteOffset + byteOffset, count * 3);
+            
+            switch (componentType) {
+                case 5126: // Float
+                    for (let i = 0; i < data.length; i += 3) 
+                    {
+                        const x = data[i] / (max[0] - min[0]) * 2 - 1;
+                        const y = data[i + 1] / (max[1] - min[1]) * 2 - 1;
+                        const z = data[i + 2] / (max[2] - min[2]) * 2 - 1;
+                        positions.push(vec3.fromValues(x, y, z));
+                    }
+                    break;
+                case 5123: // Unsigned short
+                    for (let i = 0; i < data.length; i += 3)
+                    {
+                        const x = data[i] / (max[0] - min[0]) * 2 - 1;
+                        const y = data[i + 1] / (max[1] - min[1]) * 2 - 1;
+                        const z = data[i + 2] / (max[2] - min[2]) * 2 - 1;
+                        positions.push(vec3.fromValues(x, y, z));
+                    }
+                    break;
+                default:
+                    console.warn(`Unsupported component type: ${componentType}`);
+                    break;
+            }
+
+            const indices = [];
+            const indexData = new Uint8Array(indicesAccessor.bufferView.buffer, indicesAccessor.bufferView.byteOffset + indicesAccessor.byteOffset, indicesAccessor.count);
+            switch (indicesAccessor.componentType) {
+              case 5123: // Unsigned short
+                for (let i = 0; i < indexData.length; i += 2) {
+                  indices.push(indexData[i] | (indexData[i + 1] << 8));
+                }
+                break;
+              case 5125: // Unsigned int
+                for (let i = 0; i < indexData.length; i += 4) {
+                  indices.push(indexData[i] | (indexData[i + 1] << 8) | (indexData[i + 2] << 16) | (indexData[i + 3] << 24));
+                }
+                break;
+              default:
+                console.warn(`Unsupported component type: ${indicesAccessor.componentType}`);
+                break;
+            }
+            for (let i = 0; i < indices.length; i += 3) {
+                const v0 = positions[indices[i]];
+                const v1 = positions[indices[i + 1]];
+                const v2 = positions[indices[i + 2]];
+                // console.log(v0+", "+v1+", "+v2);
+                triangleArray.push([v0, v1, v2])
+            }
+        }
+        return triangleArray;
     }
 
     renderNode(node, mvpMatrix) {
@@ -233,7 +315,7 @@ export class Renderer {
 
         const vao = this.glObjects.get(primitive);
         gl.bindVertexArray(vao);
-
+        
         const material = primitive.material;
         gl.uniform4fv(uniforms.uBaseColorFactor, material.baseColorFactor);
 

@@ -11,7 +11,7 @@ export class Game extends Application {
     this.renderer = new Renderer(this.gl);
     this.Loader = new GLTFLoader();
 
-    await this.Loader.load("./scenes/gltf/testIsland.gltf");
+    await this.Loader.load("./scenes/test/TestWithPlayer/slopetest.gltf");
 
     this.camera = await this.Loader.loadNode("Camera");
     this.light = await this.Loader.loadNode("Light");
@@ -37,15 +37,26 @@ export class Game extends Application {
     console.log(this.scene);
 
     this.renderer.prepareScene(this.scene);
-    this.GameController = new GameController();
+    this.gameController = new GameController();
+    this.gameController.init(this.scene)
   }
 
   render() {
     this.renderer.render(this.scene, this.camera, this.sun);
   }
 
-  resize(width, height) {
-    this.camera.camera.aspect = width / height;
-    this.camera.camera.updateProjectionMatrix();
+  resize() {
+    const w = this.canvas.clientWidth;
+    const h = this.canvas.clientHeight;
+    const aspectRatio = w / h;
+
+    if (this.camera.camera) {
+        this.camera.camera.aspect = aspectRatio;
+        this.camera.camera.updateProjectionMatrix();
+    }
+  }
+
+  update() { 
+    if (this.gameController.shouldUpdate) this.gameController.update();
   }
 }
