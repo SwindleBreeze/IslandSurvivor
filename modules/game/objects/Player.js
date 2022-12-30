@@ -10,6 +10,12 @@ export class Player extends GameObject{
             up: [0, 0, -1],
             right: [1, 0, 0],
         }
+
+        this.levels = {
+            1: vec3.fromValues(0,1.8,0),
+            2: vec3.fromValues(0,2.5,0)
+        }
+
         this.direction
 
         this.acceleration = 10;
@@ -32,10 +38,42 @@ export class Player extends GameObject{
         this.canChop = false;
         this.chopTarget = ""
         this.startChopTime = 0;
+
+        this.elevation = 1
     }
 
     setState(state){
         this.states.CURRENT_STATE = state;
+    }
+
+    setElevation(level,camera)
+    {
+        if(level == this.elevation) { return; }
+
+        if(level == 1)
+        {
+            this.node.translation = vec3.sub(this.node.translation, this.node.translation, this.levels[1])
+            camera.translation = vec3.sub(camera.translation, camera.translation, this.levels[1])
+        }
+        else if(level == 2)
+        {
+            if(this.elevation == 1)
+            {
+                this.node.translation = vec3.add(this.node.translation, this.node.translation, this.levels[1])
+                camera.translation = vec3.add(camera.translation, camera.translation, this.levels[1])
+            }
+            else if(this.elevation == 3)
+            {
+                this.node.translation = vec3.sub(this.node.translation, this.node.translation, this.levels[2])
+                camera.translation = vec3.sub(camera.translation, camera.translation, this.levels[2])
+            }
+        }
+        else if(level == 3)
+        {
+            this.node.translation = vec3.add(this.node.translation, this.node.translation, this.levels[2])
+            camera.translation = vec3.add(camera.translation, camera.translation, this.levels[2])
+        }
+        this.elevation = level
     }
 
 

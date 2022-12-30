@@ -280,6 +280,9 @@ export class Renderer {
     }
 
     renderNode(node, mvpMatrix) {
+        // Comment to hide colision heights
+        // if(node.name.startsWith("Cube")) return;
+
         const gl = this.gl;
 
         const { program, uniforms } = this.programs.simple;
