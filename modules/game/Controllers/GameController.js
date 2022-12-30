@@ -2,12 +2,15 @@ import { vec3 } from "../../../../lib/gl-matrix-module.js";
 import { Player } from "../objects/Player.js";
 import { InputController } from "./InputController.js";
 import { CollisionController } from "./CollisionController.js";
+import { Tree } from "../objects/Tree.js";
+import { UIController } from "./UIController.js";
 
 export class GameController{
     constructor()
     {
         this.player = null;
         this.camera = null;
+        this.trees = []
 
         this.shouldUpdate = true;
 
@@ -18,21 +21,23 @@ export class GameController{
 
         this.collisionController = new CollisionController(this);
         this.startTime = 0;
+
+        this.uiController = new UIController(this)
     }
 
-    init(scene)
+    init(scene, twoD)
     {
         this.scene = scene;
-        console.log(this.scene.nodes)
+        this.ctx2d = twoD
 
-        for (let i=0; i < scene.nodes.length; i++) {          
-            // console.log(scene.nodes[i].name);  
+        for (let i=0; i < scene.nodes.length; i++) {
             if (scene.nodes[i].name == "Player") {this.player = new Player(scene.nodes[i]); console.log(this.player)};        
             if (scene.nodes[i].name == "Camera") this.camera = scene.nodes[i];
+            if (scene.nodes[i].name.startsWith("TreeStump")) this.trees.push(new Tree(scene.nodes[i]));
         }
 
 
-        this.camera.translation = this.camera.translation = vec3.add(this.camera.translation,this.player.node.translation, [0,2,2])
+        this.camera.translation = this.camera.translation = vec3.add(this.camera.translation,this.player.node.translation, [0,12,12])
         this.camera.rotation = [-0.3, 0, 0, 1];
         this.camera.canMove = true
         this.camera.camera.fov = 0.9;
@@ -45,6 +50,10 @@ export class GameController{
 
         this.state.inputs = this.inputController.keys;
         this.shouldUpdate = true;
+
+        //start UI
+        this.uiController.init(this.player, this.ctx2d)
+        console.log(this.uiController)
     }
 
     update()
@@ -57,6 +66,14 @@ export class GameController{
             let playerPos = vec3.clone(this.player.node.translation);
             this.player.update(this,dt);
             let newPos = vec3.clone(this.player.node.translation);
+
+            if(this.player.chop(this))
+            {
+                this.scene.deleteNode(this.player.chopTarget);
+                this.trees.splice(this.trees.indexOf(this.trees.find(element => element.node == this.player.chopTarget)),1);
+                console.log(this.player.wood)
+            }
+
             this.collisionController.update()
             vec3.sub(playerPos, newPos, playerPos);
             this.camera.prevPos = this.camera.translation
@@ -64,8 +81,7 @@ export class GameController{
             {
                 this.camera.translation = vec3.add(this.camera.translation,this.camera.translation,playerPos);
             }
-            
-            
+
         }
     }
 }

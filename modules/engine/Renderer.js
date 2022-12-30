@@ -335,5 +335,4 @@ export class Renderer {
             gl.drawArrays(mode, 0, count);
         }
     }
-
 }

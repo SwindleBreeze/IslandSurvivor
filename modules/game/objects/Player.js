@@ -12,8 +12,8 @@ export class Player extends GameObject{
         }
         this.direction
 
-        this.acceleration = 5;
-        this.maxSpeed = 5;
+        this.acceleration = 10;
+        this.maxSpeed = 15;
 
         this.pitch = -1.5;
         this.yaw = 0;
@@ -29,6 +29,9 @@ export class Player extends GameObject{
         }
 
         this.collision = false;
+        this.canChop = false;
+        this.chopTarget = ""
+        this.startChopTime = 0;
     }
 
     setState(state){
@@ -73,11 +76,17 @@ export class Player extends GameObject{
         if (game.state.inputs['KeyD'] && game.state.inputs['KeyS']){
             this.yaw = 1
         }
-        
+
         vec3.scaleAndAdd(this.velocity, this.velocity,accel, dt*this.acceleration)
         
-        if(!game.state.inputs['KeyW'] && !game.state.inputs['KeyS'] && !game.state.inputs['KeyD'] && !game.state.inputs['KeyA']) this.velocity = [0,0,0];
-
+        if(!game.state.inputs['KeyW'] && !game.state.inputs['KeyS'] && !game.state.inputs['KeyD'] && !game.state.inputs['KeyA']) 
+        {
+            this.velocity = [0,0,0]
+        }
+        else
+        {
+            this.canChop = false;
+        }
         let speed = vec3.length(this.velocity)
         if(speed > this.maxSpeed) vec3.scale(this.velocity, this.velocity, this.maxSpeed / speed);
 
@@ -88,5 +97,23 @@ export class Player extends GameObject{
         quat.rotateY(rotation, rotation, this.yaw);
         quat.rotateX(rotation, rotation, this.pitch);
         this.node.rotation = rotation;
+    }
+
+    chop(game)
+    {
+        if(game.state.inputs["KeyE"] && this.canChop)
+        {
+            let tree = game.trees.find(element => element.node == this.chopTarget)
+            if(tree != null)
+            {
+                let result = tree.hit()
+                if(result)
+                {
+                    this.wood += tree.wood
+                    return true
+                }
+            }
+            return false
+        }
     }
 }

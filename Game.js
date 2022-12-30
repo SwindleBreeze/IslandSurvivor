@@ -6,12 +6,12 @@ import { Node } from "./modules/engine/Node.js";
 import { GameController } from "./modules/game/Controllers/GameController.js";
 
 //JUSTI IS GHEJ
-export class Game extends Application {
+export class game extends Application {
   async start() {
     this.renderer = new Renderer(this.gl);
     this.Loader = new GLTFLoader();
 
-    await this.Loader.load("./scenes/test/TestWithPlayer/slopetestTree.gltf");
+    await this.Loader.load("./scenes/test/LowPolyIsland3good.gltf");
 
     this.camera = await this.Loader.loadNode("Camera");
     this.light = await this.Loader.loadNode("Light");
@@ -38,7 +38,7 @@ export class Game extends Application {
 
     this.renderer.prepareScene(this.scene);
     this.gameController = new GameController();
-    this.gameController.init(this.scene)
+    this.gameController.init(this.scene, this.ui)
   }
 
   render() {

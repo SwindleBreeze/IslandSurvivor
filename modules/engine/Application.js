@@ -1,10 +1,12 @@
 export class Application {
 
-    constructor(canvas, glOptions) {
+    constructor(canvas, ui ,glOptions) {
         this._update = this._update.bind(this);
         this._render = this._render.bind(this);
 
+        console.log(ui)
         this.gl = canvas.getContext('webgl2', glOptions);
+        this.ui = ui.getContext('2d');
     }
 
     async init() {

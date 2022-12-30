@@ -23,15 +23,20 @@
   </head>
   <body>
     <canvas id="canvas"></canvas>
+    <canvas id="uiCanvas"></canvas>
     <script type="module">
-      import { Game } from "./Game.js";
+      import { game } from "./game.js";
 
-      const canvas = document.querySelector("canvas");
+      let canvas = document.querySelector("canvas");
+      let ui = document.getElementById("uiCanvas")
 
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      const app = new Game(canvas);
+      ui.width = window.innerWidth;
+      ui.height = window.innerHeight;
+
+      let app = new game(canvas, ui);
       await app.init();
     </script>
   </body>

@@ -27,4 +27,8 @@ export class Scene {
             after(node);
         }
     }
+
+    deleteNode(node) {
+        if (this.nodes.indexOf(node) > -1) this.nodes.splice(this.nodes.indexOf(node),1);
+    }
 }

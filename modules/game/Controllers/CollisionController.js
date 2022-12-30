@@ -168,7 +168,11 @@ export class CollisionController {
         
         for (let node of this.game.scene.nodes)
         {
-            if(node != null && node.name != "Player" && node.name!="WGTS_rig" && node.name!="Island"){
+            if(node.name.startsWith("Sand"))
+            {
+                console.log(node)
+            }
+            if(node != null && node.name != "Player" && node.name!="WGTS_rig" && node.name!="Plane"){
                 let collision = this.checkCollision(this.player, node)
                 if(collision){
                     console.log(node.name)
@@ -182,33 +186,9 @@ export class CollisionController {
                 }
                 if(collision && node.name.startsWith("TreeStump"))
                 {
+                    this.player.canChop = true;
+                    this.player.chopTarget = node
                     this.interactibles[node.name] = true;
-                    // console.log(this.game.state.inputs)
-                    if(this.game.state.inputs["KeyE"])
-                    {
-                        console.log("Chopping wood")
-                    }
-                    // if(this.player.node.translation[0]+this.player.node.scale[0] > node.translation[0]+node.scale[0])
-                    // {
-                    //     console.log("CAME FROM RIGHT")
-                    // }
-
-                    // if(this.player.node.translation[0]+this.player.node.scale[0] < node.translation[0]+node.scale[0])
-                    // {
-                    //     console.log("CAME FROM LEFT")
-                    // }
-
-                    // if(this.player.node.translation[2]+this.player.node.scale[2] > node.translation[2]+node.scale[2])
-                    // {
-                    //     console.log("CAME FROM BOTTOM")
-                    // }
-
-                    // if(this.player.node.translation[2]+this.player.node.scale[2] < node.translation[2]+node.scale[2])
-                    // {
-                    //     console.log("CAME FROM TOP")
-                    // }
-                    // console.log(this.player.prevPos)
-                    // this.player.node.translation = this.player.prevPos
                 }
                 else if(!collision && node.name.startsWith("TreeStump"))
                 {
