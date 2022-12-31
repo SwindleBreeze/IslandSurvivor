@@ -96,6 +96,15 @@ export class CollisionController {
                         this.camera.canMove = false
                     }
                 }
+
+                if(collision && node.name.startsWith("Pickup"))
+                {
+                    let parts = node.name.split("_")
+                    this.player.pickups[parts[1]] = true
+                    this.player.children.push(node)
+                    this.game.scene.deleteNode(node)
+                }
+
                 if(collision && node.name.startsWith("TreeStump"))
                 {
                     this.player.canChop = true;

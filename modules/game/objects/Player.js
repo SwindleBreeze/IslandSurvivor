@@ -38,6 +38,9 @@ export class Player extends GameObject{
         this.canChop = false;
         this.chopTarget = ""
         this.startChopTime = 0;
+        this.chopReleased = true;
+        this.pickups = {}
+        this.children = []
 
         this.elevation = 1
     }
@@ -125,6 +128,7 @@ export class Player extends GameObject{
         {
             this.canChop = false;
         }
+
         let speed = vec3.length(this.velocity)
         if(speed > this.maxSpeed) vec3.scale(this.velocity, this.velocity, this.maxSpeed / speed);
 
@@ -139,7 +143,7 @@ export class Player extends GameObject{
 
     chop(game)
     {
-        if(game.state.inputs["KeyE"] && this.canChop)
+        if(game.state.inputs["KeyE"] && this.canChop && this.chopReleased && this.pickups["Axe"])
         {
             let tree = game.trees.find(element => element.node == this.chopTarget)
             if(tree != null)

@@ -27,7 +27,7 @@ export class Tree extends GameObject{
             this.timer = setTimeout(function()
             {
                 this.canBeHit = true
-            }.bind(this),500)
+            }.bind(this),1500)
             return false
         }
 

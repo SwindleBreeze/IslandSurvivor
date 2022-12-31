@@ -4,6 +4,7 @@ import { InputController } from "./InputController.js";
 import { CollisionController } from "./CollisionController.js";
 import { Tree } from "../objects/Tree.js";
 import { UIController } from "./UIController.js";
+import { Pickup } from "../objects/Pickup.js";
 
 export class GameController{
     constructor()
@@ -11,6 +12,7 @@ export class GameController{
         this.player = null;
         this.camera = null;
         this.trees = []
+        this.pickups = []
 
         this.shouldUpdate = true;
 
@@ -34,6 +36,11 @@ export class GameController{
             if (scene.nodes[i].name == "Player") {this.player = new Player(scene.nodes[i]); console.log(this.player)};        
             if (scene.nodes[i].name == "Camera") this.camera = scene.nodes[i];
             if (scene.nodes[i].name.startsWith("TreeStump")) this.trees.push(new Tree(scene.nodes[i]));
+            if (scene.nodes[i].name.startsWith("Pickup")) 
+            {
+                let parts = scene.nodes[i].name.split('_');
+                this.pickups.push(new Pickup(scene.nodes[i], parts[1]));
+            }
         }
 
 
@@ -54,6 +61,7 @@ export class GameController{
         //start UI
         this.uiController.init(this.player, this.ctx2d)
         console.log(this.uiController)
+        console.log(this.pickups)
     }
 
     update()
@@ -81,7 +89,7 @@ export class GameController{
             {
                 this.camera.translation = vec3.add(this.camera.translation,this.camera.translation,playerPos);
             }
-
+            this.uiController.update()
         }
     }
 }
