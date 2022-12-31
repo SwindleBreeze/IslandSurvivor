@@ -48,7 +48,7 @@ export class GameController{
         this.camera.rotation = [-0.3, 0, 0, 1];
         this.camera.canMove = true
         this.camera.camera.fov = 0.8;
-        this.camera.camera.far = 120;
+        this.camera.camera.far = 240;
         this.camera.camera.near = 1;
 
         this.camera.camera.updateProjectionMatrix();

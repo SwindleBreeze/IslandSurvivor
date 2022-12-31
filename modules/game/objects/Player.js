@@ -13,7 +13,7 @@ export class Player extends GameObject{
 
         this.levels = {
             1: vec3.fromValues(0,1.8,0),
-            2: vec3.fromValues(0,2.5,0)
+            2: vec3.fromValues(0,1.67,0)
         }
 
         this.direction

@@ -11,7 +11,7 @@ export class game extends Application {
     this.renderer = new Renderer(this.gl);
     this.Loader = new GLTFLoader();
 
-    await this.Loader.load("./scenes/test/LowPolyIsland3goodTree.gltf");
+    await this.Loader.load("./scenes/test/LowPolyIsland3best.gltf");
 
     this.camera = await this.Loader.loadNode("Camera");
     this.light = await this.Loader.loadNode("Light");

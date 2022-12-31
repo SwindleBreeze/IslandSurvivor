@@ -80,7 +80,7 @@ export class CollisionController {
         let level = 0;
         for (let node of this.game.scene.nodes)
         {
-            if(node != null && node.name != "Player" && node.name!="WGTS_rig" && node.name!="Plane"){
+            if(node != null && node.name != "Player" && node.name!="WGTS_rig" && node.name!="Plane"  && node.name!="Ocean"){
                 let collision = this.checkCollision(this.player, node)
                 if(collision && node.name.startsWith("Level"))
                 {
