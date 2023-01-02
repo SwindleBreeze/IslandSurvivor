@@ -15,7 +15,8 @@ export class game extends Application {
 
     this.camera = await this.Loader.loadNode("Camera");
     this.light = await this.Loader.loadNode("Light");
-    console.log(this.light);
+    console.log(this.light)
+
     this.scene = await this.Loader.loadScene(this.Loader.defaultScene);
 
     if (!this.scene || !this.camera) {
@@ -28,11 +29,11 @@ export class game extends Application {
 
     //Create sun object
     //to ni glih ok sam bomo vidl
-    this.sun = new Node();
-    this.sun.position = [0, 2, 1];
-    this.sun.color = [255, 255, 255];
-    this.sun.intensity = 1;
-    this.sun.attenuation = [0.001, 0, 0.3];
+    // this.sun = new Node();
+    // this.sun.position = [0, 2, 1];
+    this.light.color = [255, 255, 255];
+    this.light.intensity = 1;
+    this.light.attenuation = [0.001, 0, 0.3];
 
     console.log(this.scene);
 
@@ -42,7 +43,7 @@ export class game extends Application {
   }
 
   render() {
-    this.renderer.render(this.scene, this.camera, this.sun);
+    this.renderer.render(this.scene, this.camera, this.light);
   }
 
   resize() {

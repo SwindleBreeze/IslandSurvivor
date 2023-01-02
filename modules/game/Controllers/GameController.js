@@ -44,11 +44,11 @@ export class GameController{
         }
 
 
-        this.camera.translation = this.camera.translation = vec3.add(this.camera.translation,this.player.node.translation, [0,20,20])
-        this.camera.rotation = [-0.3, 0, 0, 1];
+        this.camera.translation = this.camera.translation = vec3.add(this.camera.translation,this.player.node.translation, [0,5,20])
+        this.camera.rotation = [0, 0, 0, 0];
         this.camera.canMove = true
         this.camera.camera.fov = 0.8;
-        this.camera.camera.far = 240;
+        this.camera.camera.far = 360;
         this.camera.camera.near = 1;
 
         this.camera.camera.updateProjectionMatrix();
@@ -89,6 +89,7 @@ export class GameController{
             {
                 this.camera.translation = vec3.add(this.camera.translation,this.camera.translation,playerPos);
             }
+            
             this.uiController.update()
         }
     }

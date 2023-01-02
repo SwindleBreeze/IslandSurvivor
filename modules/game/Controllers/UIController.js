@@ -17,12 +17,12 @@ export class UIController {
             
         }.bind(this));
         console.log(this.game.scene)
+        this.pickups = []
 
     }
 
     update() {
-
-        this.ctx.clearRect(0, 0, 700, 350);
+        this.ctx.clearRect(0, 0, 900, 400);
         this.ctx.fillStyle = "rgba(0, 0, 0, 1)";
         this.ctx.font = "50px myFont";
         this.ctx.fillText("Wood: ", 15, 50);
@@ -30,8 +30,14 @@ export class UIController {
         let chopTarget = this.game.trees.find(element => element.node == this.player.chopTarget)
         if(this.player.canChop && chopTarget!= null && this.player.pickups["Axe"])
         {
-            this.ctx.fillStyle = "rgba(47,47,47,0.57)";
-            this.ctx.fillText("PRESS 'E' TO CHOP", 200, 200);
+            this.ctx.fillStyle = "rgba(20,20,20,1)";
+            if(this.player.wood != 0)
+                this.ctx.fillText("HOLD STILL AND PRESS 'E' TO CHOP", 200, 200);
+            else
+            {
+                this.ctx.fillText("HOLD STILL AND PRESS 'E' TO CHOP", 200, 200);
+                this.ctx.fillText("MOVEMENT KEYS CANCEL THE CHOP", 200, 250);
+            }
             if(this.game.state.inputs['KeyE'] && this.chopDisplay)
             {
                 if(chopTarget!=null && !chopTarget.canBeHit)
@@ -50,8 +56,23 @@ export class UIController {
         }
         else if(this.player.canChop && chopTarget!= null && !this.player.pickups["Axe"])
         {
-            this.ctx.fillStyle = "rgba(47,47,47,0.57)";
+            this.ctx.fillStyle = "rgba(20,20,20,1)";
             this.ctx.fillText("FIND AN AXE", 200, 200);
         }
+
+    }
+
+    pickup()
+    {
+        for(let [key, value] of Object.entries(this.player.pickups))
+        {
+            console.log(key)
+            console.log(value)
+        }
+        this.ctx.clearRect(0, 0, 1200, 400);
+        this.ctx.fillStyle = "rgba(0, 0, 0, 1)";
+        this.ctx.font = "50px myFont";
+        this.ctx.fillText("PICKED UP", 500, 200);
+        this.ctx.fillText(name, 550, 200);
     }
 }

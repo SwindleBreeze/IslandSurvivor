@@ -13,7 +13,7 @@ export class Renderer {
         this.gl = gl;
         this.glObjects = new Map();
         this.programs = WebGL.buildPrograms(gl, shaders);
-
+        console.log(this.programs)
         gl.clearColor(1, 1, 1, 1);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
@@ -194,7 +194,7 @@ export class Renderer {
 
     render(scene, camera, light) {
         const gl = this.gl;
-
+        // console.log(light)
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.enable(gl.DEPTH_TEST)
 
@@ -202,6 +202,9 @@ export class Renderer {
         gl.useProgram(program);
 
         const mvpMatrix = this.getViewProjectionMatrix(camera);
+
+        // console.log(mvpMatrix)
+        // this.renderNode(light, mvpMatrix)
         for (const node of scene.nodes) {
             this.renderNode(node, mvpMatrix);
         }
@@ -280,8 +283,8 @@ export class Renderer {
     }
 
     renderNode(node, mvpMatrix) {
-        // Comment to hide colision heights
-        // if(node.name.startsWith("Cube")) return;
+        // Comment to hide colision
+        if(node.name.startsWith("Level") || node.name.startsWith("Volcano")) return;
 
         const gl = this.gl;
 
