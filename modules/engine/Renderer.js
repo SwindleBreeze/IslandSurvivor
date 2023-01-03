@@ -214,7 +214,9 @@ export class Renderer {
             // {
             //     console.log(node)
             // }
-            this.renderNode(node, mvpMatrix, gameController.houseLevel, gameController.fireLevel );
+
+            //console.log("sdhfkjsdhfjk")
+            this.renderNode(node, mvpMatrix, gameController.houseLevel, gameController.fireLevel, gameController.player);
         }
     }
 
@@ -290,25 +292,96 @@ export class Renderer {
         return triangleArray;
     }
 
-    renderNode(node, mvpMatrix, houseLevel, fireLevel) {
+    renderNode(node, mvpMatrix, houseLevel, fireLevel,player) {
         // Comment to hide colision
         if(node.name.startsWith("Level") || node.name.startsWith("Volcano") || node.name.startsWith("Border") || node.name.startsWith("TreeStump") || node.name.startsWith("HouseBox") || node.name.startsWith("FireBox")) return;
         if(node.name.startsWith("Pillar") && houseLevel<1) { return; }
         if(node.name.startsWith("Wall") && houseLevel<2) { return; }
         if(node.name.startsWith("Roof") && houseLevel<3) { return; }
         if(node.name.startsWith("Camp_fire") && fireLevel<1) { return; }
+        if(node.name.startsWith("PlayerPos")||node.name.startsWith("PlayerAxe")){return; }
+
         const gl = this.gl;
 
         const { program, uniforms } = this.programs.simple;
+        if(node.name == "Player")
+        {   
+            if(player.pickups["Axe"])
+            {   if(player.states.CURRENT_STATE=="idle")
+                {   
+                    let tmp=player.walkStateAxe["0"]
+                    tmp.localMatrix=node.localMatrix
+                    node=tmp
+                }
+                 if(player.states.CURRENT_STATE=="running")
+                {
+                    if(player.curPos=="1")
+                    {   
+                        player.posCount++
+                        if(player.posCount==10)
+                        {
+                            player.curPos="2"
+                            player.posCount=0
+                        }
+                        let tmp=player.walkStateAxe[player.curPos]
+                        tmp.localMatrix=node.localMatrix
+                        node=tmp
+                    }
+                    else
+                    {   
+                        player.posCount++
+                        if(player.posCount==10)
+                        {
+                            player.curPos="1"
+                            player.posCount=0
 
-        if(node.name == "metarig")
-        {
-            node.children[0].localMatrix = mat4.clone(node.localMatrix)
+                        }
+                        let tmp=player.walkStateAxe[player.curPos]
+                        tmp.localMatrix=node.localMatrix
+                        node=tmp
+                    }
+                }
+            }
+            else
+            {   if(player.states.CURRENT_STATE=="idle")
+                {
+                    let tmp=player.walkState["0"]
+                    tmp.localMatrix=node.localMatrix
+                    node=tmp
+                }
+                 if(player.states.CURRENT_STATE=="running")
+                {
+                    if(player.curPos=="1")
+                    {   
+                         player.posCount++
+                        if(player.posCount==10)
+                        {
+                            player.curPos="2"
+                            player.posCount=0
+
+                        }
+                        let tmp=player.walkState[player.curPos]
+                        tmp.localMatrix=node.localMatrix
+                        node=tmp
+                    }
+                    else
+                    {   
+                         player.posCount++
+                        if(player.posCount==10)
+                        {
+                            player.curPos="1"
+                            player.posCount=0
+                        }
+                        let tmp=player.walkState[player.curPos]
+                        tmp.localMatrix=node.localMatrix
+                        node=tmp
+                    }
+                }
+            }
         }
+
         mvpMatrix = mat4.clone(mvpMatrix);
         mat4.mul(mvpMatrix, mvpMatrix, node.localMatrix);
-
-
 
         if (node.mesh) {
             gl.uniformMatrix4fv(uniforms.uModelViewProjection, false, mvpMatrix);
@@ -318,7 +391,7 @@ export class Renderer {
         }
 
         for (const child of node.children) {
-            this.renderNode(child, mvpMatrix, houseLevel, fireLevel);
+            this.renderNode(child, mvpMatrix, houseLevel, fireLevel,player);
         }
     }
 

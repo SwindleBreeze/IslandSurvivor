@@ -38,13 +38,23 @@ export class GameController{
     {
         this.scene = scene;
         this.ctx2d = twoD
-
-        for (let i=0; i < scene.nodes.length; i++) {
+         for (let i=0; i < scene.nodes.length; i++) {
             if (scene.nodes[i].name == "Player") {
                 this.player = new Player(scene.nodes[i]); 
                 // this.player.node.translation = mat4.clone(scene.nodes[i].translation)
+            };
+        }
 
+        for (let i=0; i < scene.nodes.length; i++) {
+            if (scene.nodes[i].name == "Player") {
+                // this.player.node.translation = mat4.clone(scene.nodes[i].translation)
             };        
+            if(scene.nodes[i].name.startsWith("PlayerPos"))
+                {
+                    this.player.fillWalkState(scene.nodes[i],scene.nodes[i].name.substr(scene.nodes[i].name.length-1))
+                }
+            if(scene.nodes[i].name.startsWith("PlayerAxe"))
+            {this.player.fillWalkStateAxe(scene.nodes[i],scene.nodes[i].name.substr(scene.nodes[i].name.length-1))}
             if (scene.nodes[i].name == "Camera") this.camera = scene.nodes[i];
             if (scene.nodes[i].name.startsWith("TreeStump")) this.trees.push(new Tree(scene.nodes[i]));
             if (scene.nodes[i].name.startsWith("FireLimit")) this.fireBorders.push(scene.nodes[i]);

@@ -31,6 +31,7 @@ export class Player extends GameObject{
         this.states = {
             CURRENT_STATE: "idle",
             CHOPPING: "chooping",
+            IDLE: "idle",
             RUNNING: "running"
         }
 
@@ -48,6 +49,20 @@ export class Player extends GameObject{
         this.buildTimer = true;
 
         this.elevation = 1
+
+        this.walkState={}
+        this.walkStateAxe={}
+        this.curPos="1"
+        this.posCount=0
+
+    }
+
+    fillWalkState(node,name) {
+        this.walkState[name]=node
+    }
+
+    fillWalkStateAxe(node,name) {
+        this.walkStateAxe[name]=node
     }
 
     setState(state){
@@ -127,6 +142,7 @@ export class Player extends GameObject{
         
         if(!game.state.inputs['KeyW'] && !game.state.inputs['KeyS'] && !game.state.inputs['KeyD'] && !game.state.inputs['KeyA']) 
         {
+            this.setState(this.states.IDLE);
             this.velocity = [0,0,0]
         }
         else

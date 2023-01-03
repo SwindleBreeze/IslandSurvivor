@@ -11,11 +11,11 @@ export class game extends Application {
     this.renderer = new Renderer(this.gl);
     this.Loader = new GLTFLoader();
 
-    await this.Loader.load("./scenes/test/LowPolyIsland3best.gltf");
+    await this.Loader.load("./scenes/test/LowPolyIsland3best1.gltf");
 
     this.camera = await this.Loader.loadNode("Camera");
     this.light = await this.Loader.loadNode("Light");
-    console.log(this.light)
+    //console.log(this.light)
 
     this.scene = await this.Loader.loadScene(this.Loader.defaultScene);
 
@@ -35,7 +35,7 @@ export class game extends Application {
     this.light.intensity = 1;
     this.light.attenuation = [0.001, 0, 0.3];
 
-    console.log(this.scene);
+    //console.log(this.scene);
 
     this.renderer.prepareScene(this.scene);
     this.gameController = new GameController();
