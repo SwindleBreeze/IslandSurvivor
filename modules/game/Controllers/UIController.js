@@ -18,6 +18,7 @@ export class UIController {
         }.bind(this));
         console.log(this.game.scene)
         this.pickups = []
+        this.tutorial = true;
 
     }
 
@@ -31,12 +32,18 @@ export class UIController {
         if(this.player.canChop && chopTarget!= null && this.player.pickups["Axe"])
         {
             this.ctx.fillStyle = "rgba(20,20,20,1)";
-            if(this.player.wood != 0)
-                this.ctx.fillText("HOLD STILL AND PRESS 'E' TO CHOP", 200, 200);
-            else
+            if(this.tutorial)
             {
                 this.ctx.fillText("HOLD STILL AND PRESS 'E' TO CHOP", 200, 200);
                 this.ctx.fillText("MOVEMENT KEYS CANCEL THE CHOP", 200, 250);
+                if(this.player.wood != 0)
+                {
+                    this.tutorial = false
+                }
+            }
+            else
+            {
+                this.ctx.fillText("HOLD STILL AND PRESS 'E' TO CHOP", 200, 200);
             }
             if(this.game.state.inputs['KeyE'] && this.chopDisplay)
             {
@@ -46,9 +53,9 @@ export class UIController {
                         this.ctx.clearRect(550,350,800,540)
                         this.chopDisplay = true
                     }.bind(this),1500)
-                    let randy = Math.floor(Math.random() * 500) + 380;
+                    let randy = Math.floor(Math.random() * 500) + 400;
                     let randx = Math.floor(Math.random() * 650) + 550;
-                    this.ctx.fillStyle = "rgba(47,47,47,1)";
+                    this.ctx.fillStyle = "rgba(113,47,47,1)";
                     this.ctx.fillText("-1", randx, randy);
                     this.chopDisplay = false
                 }
@@ -58,6 +65,24 @@ export class UIController {
         {
             this.ctx.fillStyle = "rgba(20,20,20,1)";
             this.ctx.fillText("FIND AN AXE", 200, 200);
+        }
+
+        if(this.player.canBuild && this.player.buildTarget != "")
+        {
+            this.ctx.fillStyle = "rgba(20,20,20,1)";
+            let neededWood = 6-this.player.wood
+            if(this.player.buildTarget == "House")
+                this.ctx.fillText("HOLD STILL AND PRESS 'E' TO BUILD HOUSE", 100, 200);
+            else if(this.player.buildTarget == "Fire")
+                this.ctx.fillText("HOLD STILL AND PRESS 'E' TO BUILD FIRE", 100, 200);
+            if(neededWood >=0)
+            {
+                this.ctx.fillText("WOOD REQUIRED FOR NEXT LEVEL: "+ neededWood, 100, 250); 
+            }
+            else
+            {
+                this.ctx.fillText("YOU HAVE ENOUGH WOOD FOR NEXT LEVEL", 100, 250); 
+            }
         }
 
     }

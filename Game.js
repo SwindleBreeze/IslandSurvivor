@@ -43,7 +43,7 @@ export class game extends Application {
   }
 
   render() {
-    this.renderer.render(this.scene, this.camera, this.light);
+    this.renderer.render(this.scene, this.camera, this.light, this.gameController);
   }
 
   resize() {

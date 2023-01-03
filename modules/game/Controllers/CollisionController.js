@@ -80,7 +80,7 @@ export class CollisionController {
         let level = 0;
         for (let node of this.game.scene.nodes)
         {
-            if(node != null && node.name != "Player" && node.name!="WGTS_rig" && node.name!="Plane"  && node.name!="Ocean"){
+            if(node != null && node.name != "Player" && node.name!="WGTS_rig" && node.name!="Plane"  && !node.name.startsWith("Ocean") && !node.name.startsWith("HouseLimit") && !node.name.startsWith("FireLimit") && !node.name.startsWith("metarig")){
                 let collision = this.checkCollision(this.player, node)
                 if(collision && node.name.startsWith("Level"))
                 {
@@ -103,6 +103,19 @@ export class CollisionController {
                     this.player.pickups[parts[1]] = true
                     this.player.children.push(node)
                     this.game.scene.deleteNode(node)
+                }
+
+                if(collision && (node.name == "HouseBox" || node.name=="FireBox"))
+                {
+                    if(node.name == "HouseBox")
+                    {
+                        this.player.buildTarget = "House"
+                    }
+                    else if (node.name=="FireBox")
+                    {
+                        this.player.buildTarget = "Fire"
+                    }
+                    this.player.canBuild = true
                 }
 
                 if(collision && node.name.startsWith("TreeStump"))

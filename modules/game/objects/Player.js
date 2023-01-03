@@ -39,8 +39,13 @@ export class Player extends GameObject{
         this.chopTarget = ""
         this.startChopTime = 0;
         this.chopReleased = true;
+
         this.pickups = {}
         this.children = []
+
+        this.canBuild = false;
+        this.buildTarget =""
+        this.buildTimer = true;
 
         this.elevation = 1
     }
@@ -127,6 +132,7 @@ export class Player extends GameObject{
         else
         {
             this.canChop = false;
+            this.canBuild = false;
         }
 
         let speed = vec3.length(this.velocity)
@@ -156,6 +162,29 @@ export class Player extends GameObject{
                 }
             }
             return false
+        }
+    }
+
+    build(game)
+    {
+        if(game.state.inputs["KeyE"] && this.canBuild && this.wood >=6 && this.buildTimer)
+        {
+            console.log("can build")
+            if(this.buildTarget == "Fire")
+            {
+                this.wood -=6
+                game.fireLevel++; 
+            }
+            else if(this.buildTarget == "House")
+            {
+                this.wood -=6
+                game.houseLevel++;
+            }
+            this.buildTimer = false;
+            setTimeout(function()
+            {
+                this.buildTimer = true;
+            }.bind(this), 500)
         }
     }
 }

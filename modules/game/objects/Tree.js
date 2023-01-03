@@ -11,6 +11,7 @@ export class Tree extends GameObject{
 
         this.canBeHit = true;
         this.timer
+        this.assocMesh = ""
 
     }
 

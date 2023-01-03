@@ -192,7 +192,7 @@ export class Renderer {
         return vpMatrix;
     }
 
-    render(scene, camera, light) {
+    render(scene, camera, light, gameController) {
         const gl = this.gl;
         // console.log(light)
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -203,10 +203,18 @@ export class Renderer {
 
         const mvpMatrix = this.getViewProjectionMatrix(camera);
 
+        // console.log("PLAYER")
+        // console.log(gameController.player.node.translation)
+        // console.log("CAMERA")
+        // console.log(camera.translation)
         // console.log(mvpMatrix)
         // this.renderNode(light, mvpMatrix)
         for (const node of scene.nodes) {
-            this.renderNode(node, mvpMatrix);
+            // if(node.name == "metarig")
+            // {
+            //     console.log(node)
+            // }
+            this.renderNode(node, mvpMatrix, gameController.houseLevel, gameController.fireLevel );
         }
     }
 
@@ -282,16 +290,25 @@ export class Renderer {
         return triangleArray;
     }
 
-    renderNode(node, mvpMatrix) {
+    renderNode(node, mvpMatrix, houseLevel, fireLevel) {
         // Comment to hide colision
-        if(node.name.startsWith("Level") || node.name.startsWith("Volcano")) return;
-
+        if(node.name.startsWith("Level") || node.name.startsWith("Volcano") || node.name.startsWith("Border") || node.name.startsWith("TreeStump") || node.name.startsWith("HouseBox") || node.name.startsWith("FireBox")) return;
+        if(node.name.startsWith("Pillar") && houseLevel<1) { return; }
+        if(node.name.startsWith("Wall") && houseLevel<2) { return; }
+        if(node.name.startsWith("Roof") && houseLevel<3) { return; }
+        if(node.name.startsWith("Camp_fire") && fireLevel<1) { return; }
         const gl = this.gl;
 
         const { program, uniforms } = this.programs.simple;
 
+        if(node.name == "metarig")
+        {
+            node.children[0].localMatrix = mat4.clone(node.localMatrix)
+        }
         mvpMatrix = mat4.clone(mvpMatrix);
         mat4.mul(mvpMatrix, mvpMatrix, node.localMatrix);
+
+
 
         if (node.mesh) {
             gl.uniformMatrix4fv(uniforms.uModelViewProjection, false, mvpMatrix);
@@ -301,7 +318,7 @@ export class Renderer {
         }
 
         for (const child of node.children) {
-            this.renderNode(child, mvpMatrix);
+            this.renderNode(child, mvpMatrix, houseLevel, fireLevel);
         }
     }
 
