@@ -52,6 +52,8 @@ export class Player extends GameObject{
 
         this.walkState={}
         this.walkStateAxe={}
+        this.walkStateChop={}
+
         this.curPos="1"
         this.posCount=0
 
@@ -63,6 +65,9 @@ export class Player extends GameObject{
 
     fillWalkStateAxe(node,name) {
         this.walkStateAxe[name]=node
+    }
+    fillWalkStateChop(node,name) {
+        this.walkStateChop[name]=node
     }
 
     setState(state){
@@ -147,6 +152,7 @@ export class Player extends GameObject{
         }
         else
         {
+            this.setState(this.states.RUNNING);
             this.canChop = false;
             this.canBuild = false;
         }
@@ -166,7 +172,8 @@ export class Player extends GameObject{
     chop(game)
     {
         if(game.state.inputs["KeyE"] && this.canChop && this.chopReleased && this.pickups["Axe"])
-        {
+        {   
+            this.setState(this.states.CHOPPING)
             let tree = game.trees.find(element => element.node == this.chopTarget)
             if(tree != null)
             {
@@ -184,7 +191,7 @@ export class Player extends GameObject{
     build(game)
     {
         if(game.state.inputs["KeyE"] && this.canBuild && this.wood >=6 && this.buildTimer)
-        {
+        {   
             console.log("can build")
             if(this.buildTarget == "Fire")
             {

@@ -299,7 +299,7 @@ export class Renderer {
         if(node.name.startsWith("Wall") && houseLevel<2) { return; }
         if(node.name.startsWith("Roof") && houseLevel<3) { return; }
         if(node.name.startsWith("Camp_fire") && fireLevel<1) { return; }
-        if(node.name.startsWith("PlayerPos")||node.name.startsWith("PlayerAxe")){return; }
+        if(node.name.startsWith("PlayerPos")||node.name.startsWith("PlayerAxe")||node.name.startsWith("PlayerChop")){return; }
 
         const gl = this.gl;
 
@@ -313,12 +313,14 @@ export class Renderer {
                     tmp.localMatrix=node.localMatrix
                     node=tmp
                 }
-                 if(player.states.CURRENT_STATE=="running")
-                {
+                if(player.states.CURRENT_STATE=="running")
+                {   
+                    if(player.curPos=="3")
+                        player.curPos="1"
                     if(player.curPos=="1")
                     {   
                         player.posCount++
-                        if(player.posCount==10)
+                        if(player.posCount>10)
                         {
                             player.curPos="2"
                             player.posCount=0
@@ -329,18 +331,66 @@ export class Renderer {
                     }
                     else
                     {   
+                        
+
                         player.posCount++
-                        if(player.posCount==10)
+                        if(player.posCount>10)
                         {
                             player.curPos="1"
                             player.posCount=0
 
                         }
+                        if(player.curPos=="3")
+                            {player.curPos="1"}
+                        console.log(player.curPos)
+                        
                         let tmp=player.walkStateAxe[player.curPos]
                         tmp.localMatrix=node.localMatrix
                         node=tmp
                     }
                 }
+                if(player.states.CURRENT_STATE=="chooping")
+                {
+                    if(player.curPos=="1")
+                    {   
+                        player.posCount++
+                        if(player.posCount>15)
+                        {
+                            player.curPos="2"
+                            player.posCount=0
+                        }
+                        let tmp=player.walkStateChop[player.curPos]
+                        tmp.localMatrix=node.localMatrix
+                        node=tmp
+                    }
+                    else if (player.curPos=="2")
+                    {   
+                        player.posCount++
+                        if(player.posCount>15)
+                        {
+                            player.curPos="3"
+                            player.posCount=0
+
+                        }
+                        let tmp=player.walkStateChop[player.curPos]
+                        tmp.localMatrix=node.localMatrix
+                        node=tmp
+                    }
+                    else if (player.curPos=="3")
+                    {   
+                        player.posCount++
+                        if(player.posCount>15)
+                        {
+                            player.curPos="1"
+                            player.posCount=0
+
+                        }
+                        let tmp=player.walkStateChop[player.curPos]
+                        tmp.localMatrix=node.localMatrix
+                        node=tmp
+                    }
+                }
+
             }
             else
             {   if(player.states.CURRENT_STATE=="idle")
@@ -351,10 +401,12 @@ export class Renderer {
                 }
                  if(player.states.CURRENT_STATE=="running")
                 {
+                    if(player.curPos=="3")
+                        player.curPos="1"
                     if(player.curPos=="1")
                     {   
                          player.posCount++
-                        if(player.posCount==10)
+                        if(player.posCount>10)
                         {
                             player.curPos="2"
                             player.posCount=0
@@ -367,7 +419,7 @@ export class Renderer {
                     else
                     {   
                          player.posCount++
-                        if(player.posCount==10)
+                        if(player.posCount>10)
                         {
                             player.curPos="1"
                             player.posCount=0

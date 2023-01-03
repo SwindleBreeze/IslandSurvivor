@@ -55,6 +55,8 @@ export class GameController{
                 }
             if(scene.nodes[i].name.startsWith("PlayerAxe"))
             {this.player.fillWalkStateAxe(scene.nodes[i],scene.nodes[i].name.substr(scene.nodes[i].name.length-1))}
+            if(scene.nodes[i].name.startsWith("PlayerChop"))
+            {this.player.fillWalkStateChop(scene.nodes[i],scene.nodes[i].name.substr(scene.nodes[i].name.length-1))}
             if (scene.nodes[i].name == "Camera") this.camera = scene.nodes[i];
             if (scene.nodes[i].name.startsWith("TreeStump")) this.trees.push(new Tree(scene.nodes[i]));
             if (scene.nodes[i].name.startsWith("FireLimit")) this.fireBorders.push(scene.nodes[i]);
