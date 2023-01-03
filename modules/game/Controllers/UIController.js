@@ -31,7 +31,7 @@ export class UIController {
         let chopTarget = this.game.trees.find(element => element.node == this.player.chopTarget)
         if(this.player.canChop && chopTarget!= null && this.player.pickups["Axe"])
         {
-            this.ctx.fillStyle = "rgba(20,20,20,1)";
+            this.ctx.fillStyle = "rgba(252, 255, 0, 0.8)";
             if(this.tutorial)
             {
                 this.ctx.fillText("HOLD STILL AND PRESS 'E' TO CHOP", 200, 200);
@@ -63,19 +63,19 @@ export class UIController {
         }
         else if(this.player.canChop && chopTarget!= null && !this.player.pickups["Axe"])
         {
-            this.ctx.fillStyle = "rgba(20,20,20,1)";
+            this.ctx.fillStyle = "rgba(252, 255, 0, 0.8)";
             this.ctx.fillText("FIND AN AXE", 200, 200);
         }
 
         if(this.player.canBuild && this.player.buildTarget != "")
         {
-            this.ctx.fillStyle = "rgba(20,20,20,1)";
+            this.ctx.fillStyle = "rgba(252, 255, 0, 0.8)";
             let neededWood = 6-this.player.wood
             if(this.player.buildTarget == "House")
                 this.ctx.fillText("HOLD STILL AND PRESS 'E' TO BUILD HOUSE", 100, 200);
             else if(this.player.buildTarget == "Fire")
                 this.ctx.fillText("HOLD STILL AND PRESS 'E' TO BUILD FIRE", 100, 200);
-            if(neededWood >=0)
+            if(neededWood >0)
             {
                 this.ctx.fillText("WOOD REQUIRED FOR NEXT LEVEL: "+ neededWood, 100, 250); 
             }

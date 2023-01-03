@@ -342,8 +342,7 @@ export class Renderer {
                         }
                         if(player.curPos=="3")
                             {player.curPos="1"}
-                        console.log(player.curPos)
-                        
+
                         let tmp=player.walkStateAxe[player.curPos]
                         tmp.localMatrix=node.localMatrix
                         node=tmp

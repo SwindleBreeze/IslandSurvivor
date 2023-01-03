@@ -110,6 +110,7 @@ export class GameController{
                 treeNum = treeNum[1]
                 let seekName = "Tree"+treeNum
                 console.log(seekName)
+                console.log(this.player.chopTarget)
                 for (let i=0; i < this.scene.nodes.length; i++) {
                     if (this.scene.nodes[i].name == seekName) {this.scene.deleteNode(this.scene.nodes[i]);};
                 }
