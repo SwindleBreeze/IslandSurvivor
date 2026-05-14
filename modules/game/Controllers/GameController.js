@@ -1,4 +1,4 @@
-import { vec3, mat4 } from "../../../../lib/gl-matrix-module.js";
+import { vec3 } from "../../../../lib/gl-matrix-module.js";
 import { Player } from "../objects/Player.js";
 import { InputController } from "./InputController.js";
 import { CollisionController } from "./CollisionController.js";
@@ -38,16 +38,14 @@ export class GameController{
     {
         this.scene = scene;
         this.ctx2d = twoD
-         for (let i=0; i < scene.nodes.length; i++) {
+        for (let i=0; i < scene.nodes.length; i++) {
             if (scene.nodes[i].name == "Player") {
                 this.player = new Player(scene.nodes[i]); 
-                // this.player.node.translation = mat4.clone(scene.nodes[i].translation)
             };
         }
 
         for (let i=0; i < scene.nodes.length; i++) {
             if (scene.nodes[i].name == "Player") {
-                // this.player.node.translation = mat4.clone(scene.nodes[i].translation)
             };        
             if(scene.nodes[i].name.startsWith("PlayerPos"))
                 {
@@ -73,7 +71,7 @@ export class GameController{
 
         this.camera.translation = this.camera.translation = vec3.add(this.camera.translation,this.player.node.translation, [0,4,20])
         this.camera.rotation = [0, 0, 0, 0];
-        this.camera.canMove = true
+    this.camera.canMove = true;
         this.camera.camera.fov = 0.8;
         this.camera.camera.far = 360;
         this.camera.camera.near = 1;
@@ -84,10 +82,7 @@ export class GameController{
         this.state.inputs = this.inputController.keys;
         this.shouldUpdate = true;
 
-        //start UI
-        this.uiController.init(this.player, this.ctx2d)
-        console.log(this.uiController)
-        console.log(this.pickups)
+        this.uiController.init(this.player, this.ctx2d);
     }
 
     update()
@@ -97,7 +92,6 @@ export class GameController{
             let dt = (this.time - this.startTime) * 0.001;
             this.startTime = this.time;
 
-            // console.log(this.player.node.translation)
             let playerPos = vec3.clone(this.player.node.translation);
             this.player.update(this,dt);
             let newPos = vec3.clone(this.player.node.translation);
@@ -109,14 +103,11 @@ export class GameController{
                 let treeNum = this.player.chopTarget.name.split("p")
                 treeNum = treeNum[1]
                 let seekName = "Tree"+treeNum
-                console.log(seekName)
-                console.log(this.player.chopTarget)
                 for (let i=0; i < this.scene.nodes.length; i++) {
                     if (this.scene.nodes[i].name == seekName) {this.scene.deleteNode(this.scene.nodes[i]);};
                 }
                 this.scene.deleteNode(this.player.chopTarget);
                 this.trees.splice(this.trees.indexOf(this.trees.find(element => element.node == this.player.chopTarget)),1);
-                console.log(this.player.wood)
             }
             this.player.build(this)
 
@@ -128,7 +119,6 @@ export class GameController{
                 this.camera.translation = vec3.add(this.camera.translation,this.camera.translation,playerPos);
             }
 
-            // console.log(this.camera.translation)
             this.uiController.update()
 
             if(this.fireLevel == 1)

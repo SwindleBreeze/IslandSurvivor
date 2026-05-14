@@ -9,26 +9,30 @@
       body {
         margin: 0 !important;
         padding: 0 !important;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
       }
 
       canvas {
         position: fixed;
         left: 0;
         top: 0;
+        display: block;
       }
     </style>
 
     <title>Island Survivor 0.1</title>
-    <script type="text/javascript" src="../lib/gl-matrix-min.js"></script>
+    <script type="text/javascript" src="./lib/gl-matrix-min.js"></script>
   </head>
   <body>
     <canvas id="canvas"></canvas>
     <canvas id="uiCanvas"></canvas>
     <script type="module">
-      import { game } from "./game.js";
+      import { Game } from "./Game.js";
 
       let canvas = document.querySelector("canvas");
-      let ui = document.getElementById("uiCanvas")
+      let ui = document.getElementById("uiCanvas");
 
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -36,7 +40,7 @@
       ui.width = window.innerWidth;
       ui.height = window.innerHeight;
 
-      let app = new game(canvas, ui);
+      let app = new Game(canvas, ui);
       await app.init();
     </script>
   </body>

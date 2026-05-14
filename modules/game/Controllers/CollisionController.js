@@ -1,5 +1,3 @@
-import { vec3, mat4 } from "../../../../lib/gl-matrix-module.js";
-import { Player } from "../objects/Player.js";
 export class CollisionController {
     constructor(game) {
         this.game = game;
@@ -12,7 +10,6 @@ export class CollisionController {
     init (player, camera) {
         this.player = player;
         this.camera = camera;
-        console.log(this.game.scene)
     }
 
     checkCollision(a,b) {
@@ -87,7 +84,6 @@ export class CollisionController {
                     level = this.checkHeight();
                 }
                 else if(collision){
-                    console.log(node.name)
                     this.player.collision = true
                     if(this.player.prevPos != null)
                     {
@@ -136,9 +132,9 @@ export class CollisionController {
         }
         if(level == 0)
         {
-            console.log("WRONG")
+            return;
         }
-        else
+
         {
             this.player.setElevation(level, this.camera)
         }

@@ -1,4 +1,4 @@
-import { quat, vec3, mat4 } from '../../../lib/gl-matrix-module.js';
+import { quat, vec3 } from '../../../lib/gl-matrix-module.js';
 import { GameObject } from './GameObject.js';
 
 export class Player extends GameObject{
@@ -192,7 +192,6 @@ export class Player extends GameObject{
     {
         if(game.state.inputs["KeyE"] && this.canBuild && this.wood >=6 && this.buildTimer)
         {   
-            console.log("can build")
             if(this.buildTarget == "Fire")
             {
                 this.wood -=6

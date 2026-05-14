@@ -8,15 +8,13 @@ export class UIController {
         this.player = player;
         this.ctx = ctx2d;
         this.chopDisplay = true
-        this.font = new FontFace('myFont','url(../../../fonts/old_pixel-7.ttf)')
+        this.font = new FontFace('myFont','url(./assets/fonts/old_pixel-7.ttf)')
         this.font.load().then(function(font){
             document.fonts.add(font);
-            console.log('Font loaded');
 
             this.ctx.font = "65px myFont";
             
         }.bind(this));
-        console.log(this.game.scene)
         this.pickups = []
         this.tutorial = true;
 
@@ -89,11 +87,6 @@ export class UIController {
 
     pickup()
     {
-        for(let [key, value] of Object.entries(this.player.pickups))
-        {
-            console.log(key)
-            console.log(value)
-        }
         this.ctx.clearRect(0, 0, 1200, 400);
         this.ctx.fillStyle = "rgba(0, 0, 0, 1)";
         this.ctx.font = "50px myFont";
